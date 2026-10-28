@@ -1,0 +1,6 @@
+{
+  "name": "Blossom Garden - Quản Trị Chi Nhánh Bình Thạnh",
+  "description": "Hệ thống quản trị bán hàng, đơn hàng, kho sản phẩm và chăm sóc khách hàng - Tiệm hoa Blossom Garden Bình Thạnh, TP.HCM.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

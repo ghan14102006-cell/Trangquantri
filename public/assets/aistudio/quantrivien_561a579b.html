@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị - Blossom Garden Bình Thạnh</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pink: '#ffb6c1',
+                            darkpink: '#e8929e',
+                            lightpink: '#fff0f3',
+                            green: '#81b29a',
+                            darkgreen: '#57886c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#fcf8f9] text-gray-800 antialiased min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-pink-100 flex flex-col justify-between hidden md:flex sticky top-0 h-screen shadow-sm">
+        <div class="overflow-y-auto custom-scroll">
+            <!-- Logo Brand -->
+            <div class="h-20 flex items-center px-6 gap-3 border-b border-pink-50">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-darkpink to-pink-300 flex items-center justify-center text-white shadow-md shadow-pink-200">
+                    <i class="fa-solid fa-spa text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-base font-bold tracking-tight text-gray-900 block leading-tight">Blossom Garden</span>
+                    <span class="text-[10px] text-brand-darkgreen font-semibold tracking-wider uppercase">Admin Bình Thạnh</span>
+                </div>
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="p-4 space-y-1.5 text-sm font-medium">
+                <button onclick="switchTab('overview')" id="nav-overview" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-darkpink text-white shadow-sm transition-all">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Tổng quan
+                </button>
+                <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-receipt w-5"></i> Quản lý đơn hàng</div>
+                    <span class="bg-pink-100 text-brand-darkpink text-[11px] font-bold px-2 py-0.5 rounded-full">3</span>
+                </button>
+                <button onclick="switchTab('products')" id="nav-products" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-boxes-stacked w-5"></i> Quản lý sản phẩm</div>
+                    <span class="bg-gray-100 text-gray-600 text-[11px] font-bold px-2 py-0.5 rounded-full">11</span>
+                </button>
+                <button onclick="switchTab('chat')" id="nav-chat" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-comments w-5"></i> Trò chuyện với KH</div>
+                    <span class="bg-red-100 text-red-600 text-[11px] font-bold px-2 py-0.5 rounded-full">2</span>
+                </button>
+                <button onclick="switchTab('promotions')" id="nav-promotions" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <i class="fa-solid fa-ticket w-5"></i> Khuyến mãi & Voucher
+                </button>
+                <button onclick="switchTab('returns')" id="nav-returns" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <i class="fa-solid fa-rotate-left w-5"></i> Khách trả hàng
+                </button>
+                <button onclick="switchTab('reviews')" id="nav-reviews" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <i class="fa-solid fa-star w-5"></i> Đánh giá
+                </button>
+                <button onclick="switchTab('ads')" id="nav-ads" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <i class="fa-solid fa-bullhorn w-5"></i> Chạy quảng cáo
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-pink-50 hover:text-brand-darkpink transition-all">
+                    <i class="fa-solid fa-gear w-5"></i> Cài đặt cửa hàng
+                </button>
+            </nav>
+        </div>
+
+        <!-- Admin Profile Footer -->
+        <div class="p-4 border-t border-pink-50 bg-pink-50/30 m-4 rounded-2xl flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" class="w-10 h-10 rounded-full object-cover">
+            <div class="overflow-hidden">
+                <h6 class="font-bold text-xs text-gray-800 truncate">Quản trị viên</h6>
+                <span class="text-[11px] text-brand-darkgreen font-medium block">Chi nhánh Bình Thạnh</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="flex-grow flex flex-col min-h-screen">
+        
+        <!-- TOP HEADER -->
+        <header class="h-20 bg-white border-b border-pink-100 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
+            <div class="flex items-center gap-3">
+                <h1 id="page-title" class="text-lg font-bold text-gray-900">Tổng quan cửa hàng</h1>
+                <span class="hidden sm:inline-block px-3 py-1 rounded-full bg-pink-100 text-brand-darkpink text-xs font-semibold">
+                    <i class="fa-solid fa-location-dot mr-1"></i> Quận Bình Thạnh, TP.HCM
+                </span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:block">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+                    <input type="text" placeholder="Tìm kiếm nhanh mã đơn, sản phẩm..." class="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs w-64 focus:outline-none focus:ring-2 focus:ring-brand-pink">
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-pink-50 text-brand-darkpink flex items-center justify-center cursor-pointer relative">
+                    <i class="fa-regular fa-bell text-sm"></i>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- DYNAMIC CONTENT AREA -->
+        <main class="p-6 flex-grow space-y-6">
+
+            <!-- TAB 1: OVERVIEW -->
+            <div id="tab-content-overview" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-3xl border border-pink-100 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
+                            <span>TỔNG DOANH THU</span>
+                            <div class="w-8 h-8 rounded-full bg-pink-100 text-brand-darkpink flex items-center justify-center"><i class="fa-solid fa-coins text-xs"></i></div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">13.460.000 đ</h3>
+                        <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-up"></i> +12.5% so với tháng trước</span>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-pink-100 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
+                            <span>TỔNG ĐƠN HÀNG</span>
+                            <div class="w-8 h-8 rounded-full bg-pink-100 text-brand-darkpink flex items-center justify-center"><i class="fa-solid fa-receipt text-xs"></i></div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">3</h3>
+                        <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Đơn hoàn thành tốt</span>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-pink-100 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
+                            <span>SẢN PHẨM KHO</span>
+                            <div class="w-8 h-8 rounded-full bg-brand-lightpink text-brand-darkpink flex items-center justify-center"><i class="fa-solid fa-box text-xs"></i></div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">11 Mẫu</h3>
+                        <span class="text-[11px] text-brand-darkgreen font-semibold"><i class="fa-solid fa-circle-check"></i> Sẵn sàng phục vụ</span>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-3xl border border-pink-100 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
+                            <span>KHÁCH HÀNG THÂN THIẾT</span>
+                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-users text-xs"></i></div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">1.248</h3>
+                        <span class="text-[11px] text-purple-600 font-semibold"><i class="fa-solid fa-user-plus"></i> +45 tuần này</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gray-900">Đơn hàng mới nhất tại Bình Thạnh</h3>
+                        <button onclick="switchTab('orders')" class="text-xs font-semibold text-brand-darkpink hover:underline">Xem tất cả</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-3">Mã Đơn</th>
+                                    <th class="p-3">Khách Hàng</th>
+                                    <th class="p-3">Sản Phẩm</th>
+                                    <th class="p-3">Tổng Tiền</th>
+                                    <th class="p-3">Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BLS-8921</td>
+                                    <td class="p-3 font-medium">Trần Thị Mai (0908123456)</td>
+                                    <td class="p-3">Bó Hoa Hồng Eos Hàn Quốc</td>
+                                    <td class="p-3 font-bold">680.000 đ</td>
+                                    <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 font-semibold">Chờ xác nhận</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BLS-8920</td>
+                                    <td class="p-3 font-medium">Công ty TechVina</td>
+                                    <td class="p-3">Lẵng Hoa Khai Trương Rực Rỡ</td>
+                                    <td class="p-3 font-bold">1.500.000 đ</td>
+                                    <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold">Đang giao</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BLS-8919</td>
+                                    <td class="p-3 font-medium">Nguyễn Hải Nam</td>
+                                    <td class="p-3">Bó Hướng Dương Nắng Ấm</td>
+                                    <td class="p-3 font-bold">610.000 đ</td>
+                                    <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">Hoàn thành</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ORDERS MANAGEMENT -->
+            <div id="tab-content-orders" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center flex-wrap gap-3">
+                        <h3 class="text-base font-bold text-gray-900">Danh Sách Đơn Hàng Chi Nhánh</h3>
+                        <div class="flex gap-2">
+                            <select class="px-3 py-1.5 border rounded-xl text-xs bg-gray-50">
+                                <option>Tất cả trạng thái</option>
+                                <option>Chờ xác nhận</option>
+                                <option>Đang giao</option>
+                                <option>Hoàn thành</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-3">Mã đơn</th>
+                                    <th class="p-3">Người đặt & SĐT</th>
+                                    <th class="p-3">Người nhận</th>
+                                    <th class="p-3">Sản phẩm & Tùy chỉnh</th>
+                                    <th class="p-3">Thành tiền</th>
+                                    <th class="p-3">Trạng thái</th>
+                                    <th class="p-3 text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BLS-8921</td>
+                                    <td class="p-3">Trần Thị Mai<br><span class="text-gray-400">0908123456</span></td>
+                                    <td class="p-3">Chị Lan<br><span class="text-gray-400">Quận Bình Thạnh</span></td>
+                                    <td class="p-3">Bó Hoa Hồng Eos<br><span class="text-[11px] text-pink-500">Giấy: Hồng HQ | Chúc: Mừng sinh nhật</span></td>
+                                    <td class="p-3 font-bold">680.000 đ</td>
+                                    <td class="p-3"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold rounded-lg">Chờ xác nhận</span></td>
+                                    <td class="p-3 text-center space-x-1">
+                                        <button onclick="alert('Đã xác nhận đơn hàng BLS-8921!')" class="px-2.5 py-1 bg-brand-darkgreen text-white rounded-lg font-semibold">Duyệt</button>
+                                        <button class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg">Xem QR</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: PRODUCTS MANAGEMENT (11 SẢN PHẨM KHO) -->
+            <div id="tab-content-products" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Kho Sản Phẩm (11 Mẫu)</h3>
+                            <p class="text-xs text-gray-500">Quản lý các bó hoa, lẵng hoa và phụ kiện đang bán tại cửa hàng.</p>
+                        </div>
+                        <button onclick="alert('Mở form thêm sản phẩm mới')" class="px-4 py-2 bg-brand-darkpink text-white rounded-xl text-xs font-bold shadow">
+                            <i class="fa-solid fa-plus mr-1"></i> Thêm Sản Phẩm
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://media.istockphoto.com/id/1242962658/vi/anh/hoa-h%E1%BB%93ng-hoa-m%E1%BA%ABu-%C4%91%C6%A1n-m%C3%A0u-h%E1%BB%93ng-hoa-%C4%91%E1%BA%B9p.jpg?s=1024x1024&w=is&k=20&c=PHrJ_c0n43uiKeQ-f3tPAxoeMBGYK-QyYklpqDPkaJM=" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó Hoa Hồng Eos Hàn Quốc</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">480.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Hoa tươi</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2FZRJXfS51gx7HvYcDxn7PTuyC_8uh0J5crKxyZGiCg&s" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó Tulip Lụa Pink Charm</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">350.000 đ</span>
+                                <span class="text-[10px] bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">Hoa lụa</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoahanoi.com.vn/wp-content/uploads/2022/05/gio-hoa-mung-khai-truong-1.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Lẵng Hoa Khai Trương Rực Rỡ</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">1.250.000 đ</span>
+                                <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Sự kiện</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoatuoi360.vn/upload/hinhanh/thumb/bo-hoa-huong-duong-dep-nhat714.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó Hướng Dương Nắng Ấm</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">520.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Hoa tươi</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://www.hoathangba.com/wp-content/uploads/2026/08/1785489919074_4249342021217922167_4249342021217922167_5be61551f76a89b74962f032fead3deb-600x800.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Hộp Hoa Lụa Vintage Pastel</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">680.000 đ</span>
+                                <span class="text-[10px] bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">Hoa lụa</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoatuoihoamy.com/wp-content/uploads/2022/10/Hinh-3-600x600.jpg.webp" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó Cẩm Tú Cầu Xanh Mộng Mơ</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">420.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Hoa tươi</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoasapbinhduong.vn/wp-content/uploads/2021/07/z2560758668858_dbaded8c533bfdad69d3b40635a728fc.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó Hoa Baby Tròn Cầu Vồng</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">390.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Hoa tươi</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoatuoi360.vn/upload/hinhanh/thumb/bo-hoa-hong-ecuador-noi-nay-co-anh134.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Giỏ Hoa Hồng Đỏ Ecuador Tình Yêu</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">1.450.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Hoa tươi</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mfz9vqs66y2y79" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Bó hoa hồng đỏ lụa</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">450.000 đ</span>
+                                <span class="text-[10px] bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-semibold">Hoa lụa</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://hoatuoidatviet.vn/thumb/600x667/1/upload/sanpham/ke-hoa-khai-truong-dai-phu-quy-8156.jpg" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Kệ Hoa Chúc Mừng Thành Công Bình Thạnh</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">1.600.000 đ</span>
+                                <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Sự kiện</span>
+                            </div>
+                        </div>
+                        <div class="border rounded-2xl p-3 space-y-2 bg-gray-50/50">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY0CS3KLJHY9zzqeM3gvp6f4pDjxS-qU1Gbhg6SUFZtKCmmKncJiJoe8A&s=10" class="w-full h-36 object-cover rounded-xl">
+                            <h4 class="font-bold text-xs line-clamp-1">Phụ kiện quà tặng, kèm hoa</h4>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-brand-darkpink">280.000 đ</span>
+                                <span class="text-[10px] bg-pink-100 text-brand-darkpink px-2 py-0.5 rounded-full font-semibold">Phụ kiện</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CHAT VỚI KHÁCH HÀNG (MỚI) -->
+            <div id="tab-content-chat" class="hidden space-y-6">
+                <div class="bg-white rounded-3xl border border-pink-100 shadow-sm overflow-hidden flex flex-col md:flex-row h-[600px]">
+                    <!-- Danh sách khách hàng chat -->
+                    <div class="w-full md:w-80 border-r border-gray-100 flex flex-col bg-gray-50/50">
+                        <div class="p-4 border-b border-gray-100 font-bold text-sm">Hộp thư hỗ trợ trực tuyến</div>
+                        <div class="overflow-y-auto flex-grow divide-y divide-gray-100">
+                            <div class="p-3.5 bg-pink-50 border-l-4 border-brand-darkpink cursor-pointer flex gap-3 items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-200 flex items-center justify-center font-bold text-brand-darkpink text-xs">TT</div>
+                                <div class="flex-grow overflow-hidden">
+                                    <div class="flex justify-between items-center"><h6 class="font-bold text-xs truncate">Trần Thị Mai</h6><span class="text-[10px] text-gray-400">10:15</span></div>
+                                    <p class="text-[11px] text-gray-500 truncate">Shop ơi bó hồng Eos có giao hỏa tốc đến Điện Biên Phủ kịp trước 12h không ạ?</p>
+                                </div>
+                                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                            </div>
+                            <div class="p-3 hover:bg-gray-100 cursor-pointer flex gap-3 items-center">
+                                <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center font-bold text-purple-600 text-xs">HQ</div>
+                                <div class="flex-grow overflow-hidden">
+                                    <div class="flex justify-between items-center"><h6 class="font-bold text-xs truncate">Hoàng Quân</h6><span class="text-[10px] text-gray-450">Hôm qua</span></div>
+                                    <p class="text-[11px] text-gray-500 truncate">Cảm ơn shop, hoa lụa nhận đẹp lắm ạ.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Khung nhắn tin trực tiếp -->
+                    <div class="flex-grow flex flex-col justify-between bg-white">
+                        <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-pink-200 flex items-center justify-center font-bold text-brand-darkpink text-xs">TT</div>
+                                <div>
+                                    <h6 class="font-bold text-xs">Trần Thị Mai <span class="text-[10px] text-emerald-600 font-normal">● Đang hoạt động</span></h6>
+                                    <span class="text-[10px] text-gray-400">Khách quan tâm đơn: BLS-8921</span>
+                                </div>
+                            </div>
+                            <button class="text-xs text-brand-darkpink font-semibold hover:underline">Xem thông tin khách hàng</button>
+                        </div>
+                        <div class="p-4 overflow-y-auto flex-grow space-y-3 bg-gray-50/30 text-xs">
+                            <div class="flex gap-2 max-w-md">
+                                <div class="w-7 h-7 rounded-full bg-pink-200 flex items-center justify-center font-bold text-brand-darkpink text-[10px] flex-shrink-0">TT</div>
+                                <div class="bg-white p-3 rounded-2xl shadow-sm border space-y-1">
+                                    <p>Shop ơi bó hồng Eos có giao hỏa tốc đến Điện Biên Phủ kịp trước 12h không ạ?</p>
+                                    <span class="text-[9px] text-gray-400 block">10:15</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 max-w-md ml-auto flex-row-reverse">
+                                <div class="w-7 h-7 rounded-full bg-brand-darkpink text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0">NV</div>
+                                <div class="bg-pink-100 p-3 rounded-2xl shadow-sm space-y-1">
+                                    <p>Dạ chào chị Mai, chi nhánh Bình Thạnh của bên em ở ngay Điện Biên Phủ luôn ạ! Em chuẩn bị giao hỏa tốc qua liền trong 30 phút nhé ạ.</p>
+                                    <span class="text-[9px] text-brand-darkgreen block text-right">10:18</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 border-t border-gray-100 flex gap-2">
+                            <input type="text" placeholder="Nhập tin nhắn phản hồi khách hàng..." class="flex-grow p-2.5 border rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-brand-pink">
+                            <button onclick="alert('Đã gửi tin nhắn!')" class="px-5 py-2.5 bg-brand-darkpink text-white font-bold rounded-xl text-xs shadow">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: KHUYẾN MÃI & VOUCHER (MỚI) -->
+            <div id="tab-content-promotions" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900">Quản Lý Mã Giảm Giá & Voucher</h3>
+                            <p class="text-xs text-gray-500">Tạo mã ưu đãi cho khách đặt hoa tại chi nhánh Bình Thạnh.</p>
+                        </div>
+                        <button onclick="alert('Mở form tạo mã voucher mới')" class="px-4 py-2 bg-brand-darkpink text-white rounded-xl text-xs font-bold shadow">
+                            <i class="fa-solid fa-plus mr-1"></i> Tạo Mã Giảm Giá
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-3">Mã Voucher</th>
+                                    <th class="p-3">Tiêu đề chương trình</th>
+                                    <th class="p-3">Mức giảm</th>
+                                    <th class="p-3">Hạn sử dụng</th>
+                                    <th class="p-3">Trạng thái</th>
+                                    <th class="p-3 text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BTFLOWER50K</td>
+                                    <td class="p-3 font-medium">Giảm trực tiếp 50K cho đơn hoa tươi Bình Thạnh</td>
+                                    <td class="p-3 text-red-600 font-bold">-50.000 đ</td>
+                                    <td class="p-3">30/11/2026</td>
+                                    <td class="p-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-lg">Đang hoạt động</span></td>
+                                    <td class="p-3 text-center space-x-1">
+                                        <button class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg">Sửa</button>
+                                        <button class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg">Kết thúc</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">VALENTINE20%</td>
+                                    <td class="p-3 font-medium">Ưu đãi 20% các mẫu hộp hoa lụa</td>
+                                    <td class="p-3 text-red-600 font-bold">-20% (Tối đa 200K)</td>
+                                    <td class="p-3">15/02/2027</td>
+                                    <td class="p-3"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold rounded-lg">Sắp diễn ra</span></td>
+                                    <td class="p-3 text-center space-x-1">
+                                        <button class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg">Sửa</button>
+                                        <button class="px-2.5 py-1 bg-red-50 text-red-600 rounded-lg">Kết thúc</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: RETURNS / KHÁCH TRẢ HÀNG -->
+            <div id="tab-content-returns" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-gray-900">Quản Lý Yêu Cầu Trả Hàng / Hoàn Tiền</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-3">Mã đơn</th>
+                                    <th class="p-3">Khách hàng</th>
+                                    <th class="p-3">Lý do trả hàng</th>
+                                    <th class="p-3">Số tiền hoàn</th>
+                                    <th class="p-3">Trạng thái</th>
+                                    <th class="p-3 text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="p-3 font-mono font-bold text-brand-darkpink">BLS-8890</td>
+                                    <td class="p-3">Hoàng Minh Quân</td>
+                                    <td class="p-3">Hoa bị dập một vài cánh do vận chuyển nhanh</td>
+                                    <td class="p-3 font-bold">150.000 đ (Bồi hoàn)</td>
+                                    <td class="p-3"><span class="px-2 py-1 bg-amber-100 text-amber-700 font-bold rounded-lg">Chờ xử lý</span></td>
+                                    <td class="p-3 text-center">
+                                        <button onclick="alert('Đã duyệt hoàn tiền cho đơn BLS-8890')" class="px-3 py-1 bg-brand-darkgreen text-white rounded-lg">Xác nhận hoàn</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: REVIEWS / ĐÁNH GIÁ -->
+            <div id="tab-content-reviews" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-gray-900">Đánh Giá Từ Khách Hàng (Bình Thạnh)</h3>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-2xl border space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-xs">Nguyễn Thu Hà</span>
+                                <div class="text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            </div>
+                            <p class="text-xs text-gray-600">Shop giao hoa nhanh ghê, đặt ở Điện Biên Phủ mà 30 phút sau đã nhận được bó hồng tươi rói. Rất ưng ý!</p>
+                            <span class="text-[11px] text-gray-400 block">Đánh giá sản phẩm: Bó Hoa Hồng Eos Hàn Quốc</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 8: ADS / CHẠY QUẢNG CÁO -->
+            <div id="tab-content-ads" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-gray-900">Chiến Dịch Quảng Cáo Facebook & Google Ads</h3>
+                        <button onclick="alert('Tạo chiến dịch quảng cáo mới')" class="px-4 py-2 bg-brand-darkpink text-white rounded-xl text-xs font-bold shadow">
+                            <i class="fa-solid fa-plus mr-1"></i> Tạo Quảng Cáo Mới
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 border rounded-2xl space-y-2 bg-pink-50/30">
+                            <div class="flex justify-between">
+                                <h4 class="font-bold text-sm">Quảng Cáo Hoa Valentine Bình Thạnh</h4>
+                                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full">Đang chạy</span>
+                            </div>
+                            <p class="text-xs text-gray-600">Ngân sách: 1.500.000đ / chiến dịch</p>
+                            <div class="flex justify-between text-xs pt-2 border-t">
+                                <span>Lượt click: <strong>1.420</strong></span>
+                                <span>Đã ra đơn: <strong>38 đơn</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 9: SETTINGS / CÀI ĐẶT -->
+            <div id="tab-content-settings" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm space-y-4 max-w-2xl">
+                    <h3 class="text-base font-bold text-gray-900">Cài Đặt Thông Tin Chi Nhánh</h3>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="font-bold block mb-1">Tên cửa hàng:</label>
+                            <input type="text" value="Blossom Garden - Chi nhánh Bình Thạnh" class="w-full p-2.5 border rounded-xl">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1">Địa chỉ xưởng:</label>
+                            <input type="text" value="142/5 Đường Điện Biên Phủ, Phường 25, Quận Bình Thạnh, TP.HCM" class="w-full p-2.5 border rounded-xl">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1">Hotline / Zalo nhận đơn:</label>
+                            <input type="text" value="0908.888.247" class="w-full p-2.5 border rounded-xl">
+                        </div>
+                        <button onclick="alert('Đã lưu cài đặt thành công!')" class="px-5 py-2.5 bg-brand-darkpink text-white font-bold rounded-xl">Lưu Thay Đổi</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT TAB SWITCHING LOGIC -->
+    <script>
+        function switchTab(tabId) {
+            const tabs = ['overview', 'orders', 'products', 'chat', 'promotions', 'returns', 'reviews', 'ads', 'settings'];
+            tabs.forEach(t => {
+                const content = document.getElementById(`tab-content-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (content) content.classList.add('hidden');
+                if (navBtn) {
+                    navBtn.classList.remove('bg-brand-darkpink', 'text-white', 'shadow-sm');
+                    navBtn.classList.add('text-gray-600', 'hover:bg-pink-50', 'hover:text-brand-darkpink');
+                }
+            });
+
+            const activeContent = document.getElementById(`tab-content-${tabId}`);
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeNav) {
+                activeNav.classList.remove('text-gray-600', 'hover:bg-pink-50', 'hover:text-brand-darkpink');
+                activeNav.classList.add('bg-brand-darkpink', 'text-white', 'shadow-sm');
+            }
+
+            const titles = {
+                overview: 'Tổng quan cửa hàng',
+                orders: 'Quản lý đơn hàng',
+                products: 'Quản lý sản phẩm',
+                chat: 'Trò chuyện trực tuyến với khách hàng',
+                promotions: 'Quản lý khuyến mãi & Voucher',
+                returns: 'Khách trả hàng & Hoàn tiền',
+                reviews: 'Đánh giá khách hàng',
+                ads: 'Quản lý chiến dịch quảng cáo',
+                settings: 'Cài đặt cửa hàng'
+            };
+            document.getElementById('page-title').innerText = titles[tabId] || 'Trang Quản Trị';
+        }
+    </script>
+</body>
+</html>
